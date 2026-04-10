@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<title>Đăng ký</title>
+
+<style>
+body{
+font-family: Arial;
+background:#f2f2f2;
+text-align:center;
+}
+
+.box{
+background:white;
+width:300px;
+margin:auto;
+margin-top:100px;
+padding:20px;
+border-radius:10px;
+box-shadow:0 0 10px gray;
+}
+
+input{
+width:90%;
+padding:10px;
+margin:8px;
+}
+
+button{
+padding:10px 20px;
+background:#4CAF50;
+color:white;
+border:none;
+border-radius:5px;
+cursor:pointer;
+}
+
+a{
+text-decoration:none;
+color:blue;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Đăng ký</h2>
+
+<input type="text" id="name" placeholder="Họ và tên">
+
+<input type="text" id="email" placeholder="Email">
+
+<input type="password" id="password" placeholder="Mật khẩu">
+
+<input type="password" id="confirm" placeholder="Xác nhận mật khẩu">
+
+<button onclick="register()">Đăng ký</button>
+
+<p>Đã có tài khoản?  
+<a href="login.html">Đăng nhập</a></p>
+
+<p id="msg"></p>
+
+</div>
+
+<script>
+
+function register(){
+
+let name = document.getElementById("name").value
+let email = document.getElementById("email").value
+let pass = document.getElementById("password").value
+let confirm = document.getElementById("confirm").value
+let msg = document.getElementById("msg")
+
+if(name=="" || email=="" || pass==""){
+msg.innerHTML="Vui lòng nhập đầy đủ thông tin"
+return
+}
+
+if(!email.includes("@")){
+msg.innerHTML="Email phải có ký tự @"
+return
+}
+
+if(pass != confirm){
+msg.innerHTML="Mật khẩu xác nhận không đúng"
+return
+}
+
+localStorage.setItem("email",email)
+localStorage.setItem("password",pass)
+localStorage.setItem("name",name)
+
+msg.innerHTML="Đăng ký thành công"
+
+setTimeout(function(){
+window.location.href="login.html"
+},1500)
+
+}
+
+</script>
+
+</body>
+</html>
