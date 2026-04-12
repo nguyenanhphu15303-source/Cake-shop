@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Đăng ký</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #fff;
+}
+
+.container {
+    width: 90%;
+    max-width: 380px;
+    margin: 40px auto;
+}
+
+h2 {
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+input, select {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+input:focus {
+    border-color: #f57224;
+}
+
+.invalid {
+    border-color: red !important;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.password-box {
+    position: relative;
+}
+
+.eye {
+    position: absolute;
+    right: 12px;
+    top: 14px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: #f57224;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.link {
+    text-align: center;
+    margin-top: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Tạo tài khoản</h2>
+
+    <div class="input-group">
+        <input id="name" placeholder="Họ tên">
+        <div id="nameError" class="error"></div>
+    </div>
+
+    <div class="input-group">
+        <input id="email" placeholder="Email (@gmail.com)">
+        <div id="emailError" class="error"></div>
+    </div>
+
+    <div class="input-group">
+        <input id="phone" placeholder="Số điện thoại">
+        <div id="phoneError" class="error"></div>
+    </div>
+
+    <div class="input-group password-box">
+        <input type="password" id="password" placeholder="Mật khẩu">
+        <span class="eye" onclick="togglePass('password', this)">🙈</span>
+        <div id="passwordError" class="error"></div>
+    </div>
+
+    <div class="input-group password-box">
+        <input type="password" id="confirmPassword" placeholder="Xác nhận mật khẩu">
+        <span class="eye" onclick="togglePass('confirmPassword', this)">🙈</span>
+        <div id="confirmError" class="error"></div>
+    </div>
+
+    <div class="input-group">
+        <select id="gender">
+            <option value="">Giới tính</option>
+            <option>Nam</option>
+            <option>Nữ</option>
+        </select>
+        <div id="genderError" class="error"></div>
+    </div>
+
+    <div class="input-group">
+        <input id="dob" placeholder="Ngày sinh (dd/mm/yyyy)">
+        <div id="dobError" class="error"></div>
+    </div>
+
+    <button onclick="register()">Đăng ký</button>
+
+    <div class="link">
+        <a href="login.html">Đăng nhập</a>
+    </div>
+</div>
+
+<script>
+
+// 👁 HIỆN / ẨN MẬT KHẨU
+function togglePass(id, el) {
+    let input = document.getElementById(id);
+    if (input.type === "password") {
+        input.type = "text";
+        el.innerText = "👁";
+    } else {
+        input.type = "password";
+        el.innerText = "🙈";
+    }
+}
+
+// ❌ CHẶN NHẬP CHỮ Ở SĐT
+phone.oninput = () => {
+    phone.value = phone.value.replace(/[^0-9]/g, "");
+};
+
+// 📅 FIX NGÀY SINH (NHẬP MƯỢT)
+let dob = document.getElementById("dob");
+
+dob.addEventListener("input", function () {
+    let value = this.value.replace(/[^0-9]/g, "");
+
+    if (value.length > 8) value = value.slice(0, 8);
+
+    let formatted = "";
+
+    if (value.length > 4) {
+        formatted = value.slice(0,2) + "/" + value.slice(2,4) + "/" + value.slice(4);
+    } else if (value.length > 2) {
+        formatted = value.slice(0,2) + "/" + value.slice(2);
+    } else {
+        formatted = value;
+    }
+
+    this.value = formatted;
+});
+
+// VALIDATE
+function setError(id, msg) {
+    document.getElementById(id).innerText = msg;
+    document.getElementById(id.replace("Error","")).classList.add("invalid");
+}
+
+// ĐĂNG KÝ
+function register() {
+    let valid = true;
+
+    let name = document.getElementById("name");
+    let email = document.getElementById("email");
+    let phoneInput = document.getElementById("phone");
+    let password = document.getElementById("password");
+    let confirm = document.getElementById("confirmPassword");
+    let gender = document.getElementById("gender");
+    let dobInput = document.getElementById("dob");
+
+    document.querySelectorAll(".error").forEach(e => e.innerText = "");
+    document.querySelectorAll("input,select").forEach(e => e.classList.remove("invalid"));
+
+    if (!name.value) {
+        setError("nameError","Nhập họ tên");
+        valid = false;
+    }
+
+    if (!email.value.endsWith("@gmail.com")) {
+        setError("emailError","Email phải có @gmail.com");
+        valid = false;
+    }
+
+    if (phoneInput.value.length < 9) {
+        setError("phoneError","SĐT ≥ 9 số");
+        valid = false;
+    }
+
+    if (password.value.length < 8) {
+        setError("passwordError","Mật khẩu ≥ 8 ký tự");
+        valid = false;
+    }
+
+    if (password.value !== confirm.value) {
+        setError("confirmError","Không khớp mật khẩu");
+        valid = false;
+    }
+
+    if (!gender.value) {
+        setError("genderError","Chọn giới tính");
+        valid = false;
+    }
+
+    if (!/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/.test(dobInput.value)) {
+        setError("dobError","Sai định dạng dd/mm/yyyy");
+        valid = false;
+    }
+
+    if (!valid) return;
+
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (users.find(u => u.email === email.value)) {
+        setError("emailError","Email đã tồn tại");
+        return;
+    }
+
+    users.push({
+        name: name.value,
+        email: email.value,
+        phone: phoneInput.value,
+        password: password.value,
+        gender: gender.value,
+        dob: dobInput.value
+    });
+
+    localStorage.setItem("users", JSON.stringify(users));
+
+    alert("Đăng ký thành công!");
+    window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
